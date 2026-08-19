@@ -1,0 +1,9 @@
+services:
+  weekly-reporting-app:
+    build: .
+    ports:
+      - "5001:5001"
+    volumes:
+      # Keep generated reports and local configuration outside the container.
+      - ./outputs:/app/outputs
+      - ./data:/app/data
