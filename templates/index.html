@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>PATH Weekly Reporting</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+  <header class="topbar">
+    <div>
+      <p class="eyebrow">PATH Operations</p>
+      <h1>Weekly Reporting</h1>
+    </div>
+    <label class="program-picker">
+      Program
+      <select id="program-select">
+        <option value="MHRT">MHRT</option>
+        <option value="RRT">RRT</option>
+      </select>
+    </label>
+  </header>
+
+  <main>
+    <section class="panel upload-panel">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">Data inputs</p>
+          <h2>Weekly source files</h2>
+          <p class="muted">Drop the Team mapping to fill Step 1, then process CLS, Services, Enrollment/Outcomes, and Case Notes/Timeliness in order. Step 4 creates the final combined workbook when the earlier files remain selected.</p>
+        </div>
+      </div>
+      <div class="upload-grid">
+        <div id="cls-drop-zone" class="drop-zone active-drop" tabindex="0">
+          <strong>1. CLS report</strong>
+          <span>Drop CSV, XLSX, or XLS here</span>
+          <small id="cls-file-name">No file selected</small>
+          <input id="cls-file" type="file" accept=".csv,.xlsx,.xls" hidden>
+        </div>
+        <div id="team-drop-zone" class="drop-zone active-drop optional-drop" tabindex="0">
+          <strong>Team mapping → Step 1</strong>
+          <span>Drop Team CSV, XLSX, or XLS here</span>
+          <small id="team-file-name">No file selected</small>
+          <input id="team-file" type="file" accept=".csv,.xlsx,.xls" hidden>
+        </div>
+        <div id="services-drop-zone" class="drop-zone active-drop" tabindex="0">
+          <strong>2. Services report</strong>
+          <span>Drop CSV, XLSX, or XLS here</span>
+          <small id="services-file-name">No file selected</small>
+          <input id="services-file" type="file" accept=".csv,.xlsx,.xls" hidden>
+        </div>
+        <div id="enrollment-drop-zone" class="drop-zone active-drop" tabindex="0">
+          <strong>3. Enrollment/outcomes</strong>
+          <span>Drop CSV, XLSX, or XLS here</span>
+          <small id="enrollment-file-name">No file selected</small>
+          <input id="enrollment-file" type="file" accept=".csv,.xlsx,.xls" hidden>
+        </div>
+        <div id="case-notes-drop-zone" class="drop-zone active-drop" tabindex="0">
+          <strong>4. Case notes / Timeliness</strong>
+          <span>Drop CSV, XLSX, or XLS here</span>
+          <small id="case-notes-file-name">No file selected</small>
+          <input id="case-notes-file" type="file" accept=".csv,.xlsx,.xls" hidden>
+        </div>
+      </div>
+      <div class="action-row upload-actions">
+        <span id="upload-status" class="status" aria-live="polite"></span>
+      </div>
+    </section>
+
+    <section class="panel structure-panel">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">Step 1</p>
+          <h2>Managers and staff</h2>
+          <p class="muted">The Team mapping fills these groups automatically. Services User Creating links report usernames, and Active controls the current weekly table without deleting historical staff.</p>
+        </div>
+        <div class="heading-actions">
+          <button id="load-mock" class="preview-button">Load MHRT mock data</button>
+          <button id="add-manager" class="secondary">+ Add manager</button>
+        </div>
+      </div>
+
+      <div id="manager-list" class="manager-list"></div>
+      <div class="preset-bar">
+        <input id="preset-name" type="text" placeholder="Preset name, e.g. MHRT Current Team">
+        <button id="save-preset" class="secondary">Save as preset</button>
+        <select id="preset-select"><option value="">Choose saved preset</option></select>
+        <button id="load-preset" class="secondary">Load preset</button>
+      </div>
+      <div class="action-row">
+        <div class="heading-actions">
+          <button id="save-structure">Save staff structure</button>
+          <button id="export-team" class="secondary">Save & download Team Excel</button>
+        </div>
+        <span id="structure-status" class="status" aria-live="polite"></span>
+      </div>
+    </section>
+
+    <section class="panel table-panel">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">Step 2</p>
+          <h2><span id="table-program">MHRT</span> weekly table</h2>
+          <p class="muted">The layout matches the operational spreadsheet. Values remain editable until the source reports are connected.</p>
+        </div>
+        <div class="table-controls">
+          <label>Start date <input id="start-date" type="date"></label>
+          <label>End date <input id="end-date" type="date"></label>
+          <input id="staff-filter" type="search" placeholder="Filter staff or manager">
+        </div>
+      </div>
+
+      <div class="table-wrap">
+        <table id="weekly-table">
+          <thead id="report-head"></thead>
+          <tbody id="report-body"></tbody>
+          <tfoot id="report-foot"></tfoot>
+        </table>
+        <p id="empty-table" class="empty">Add a manager and staff member to generate the table.</p>
+      </div>
+      <div class="reports-used">
+        <strong>Reports Used</strong>
+        <span>Program Details</span>
+        <span>NEW Outreach Services Report</span>
+        <span>Looker: Outreach Outcomes</span>
+        <span>Looker: Case</span>
+        <span>Looker: Case Notes</span>
+      </div>
+      <div class="action-row">
+        <div class="heading-actions">
+          <button id="save-metrics">Save table values</button>
+          <button id="create-complete-excel" class="secondary">Create Complete Excel</button>
+        </div>
+        <span id="metrics-status" class="status" aria-live="polite"></span>
+      </div>
+    </section>
+
+    <section class="panel downloads-panel">
+      <p class="eyebrow">Outputs</p>
+      <h2>Downloads</h2>
+      <p class="muted">Processed summaries appear here after a report runs. The Step 4 combined Excel contains the printable Weekly Table, all pivots, and each selected imported file on its own tab.</p>
+      <div id="download-list" class="download-list"><span class="empty-download">No downloads created in this session.</span></div>
+    </section>
+  </main>
+
+  <template id="manager-template">
+    <article class="manager-card">
+      <div class="manager-row">
+        <label>Program manager <input class="manager-name" type="text" placeholder="Manager name"></label>
+        <button class="remove-manager danger" type="button">Remove manager</button>
+      </div>
+      <div class="staff-list"></div>
+      <button class="add-staff secondary small" type="button">+ Add staff</button>
+    </article>
+  </template>
+
+  <template id="staff-template">
+    <div class="staff-row">
+      <input class="staff-name" type="text" placeholder="Staff member name">
+      <input class="service-user" type="text" placeholder="Services User Creating (optional)" aria-label="Services User Creating">
+      <select class="staff-active" aria-label="Staff active status">
+        <option value="yes">Active</option>
+        <option value="no">Inactive</option>
+      </select>
+      <button class="remove-staff icon-button" type="button" aria-label="Remove staff">×</button>
+    </div>
+  </template>
+
+  <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>

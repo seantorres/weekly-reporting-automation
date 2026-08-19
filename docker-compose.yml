@@ -1,0 +1,11 @@
+services:
+  weekly-reporting-app:
+    build: .
+    ports:
+      # host_port:container_port — visit http://localhost:5001
+      - "5001:5001"
+    volumes:
+      # Persist generated reports and saved presets on your machine,
+      # so they survive the container being rebuilt or removed.
+      - ./outputs:/app/outputs
+      - ./data:/app/data

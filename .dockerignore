@@ -1,0 +1,10 @@
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.git/
+.gitignore
+outputs/
+data/*_metrics.json
+data/staff_presets.json
+requirements.txt.bak
