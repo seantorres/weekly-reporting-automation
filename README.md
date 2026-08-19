@@ -194,4 +194,4 @@ docker compose up
 
 ## Disclaimer
 
-This project is a portfolio/generalized implementation of an operational reporting workflow. Any organization-specific names, identifiers, client information, or confidential business logic should be removed before publishing code publicly.
+This project is a generalized portfolio implementation inspired by real-world operational reporting workflows. All data used in this repository is synthetic or anonymized, and the project does not contain confidential, proprietary, or personally identifiable information.
